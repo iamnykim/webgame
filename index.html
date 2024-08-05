@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Webgame - javascript</title>
+	</head>
+	<body>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+			a,
+			a:visited,
+			a:link {
+				text-decoration: none;
+				color: black;
+			}
+
+			ul,
+			ol {
+				list-style: none;
+			}
+			.wrap {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				flex-direction: column;
+				height: 100vh;
+			}
+			.title {
+				margin-bottom: 40px;
+			}
+
+			.nav-list {
+				display: grid;
+				gap: 10px;
+				grid-template-columns: 1fr 1fr;
+			}
+
+			.nav-list li .btn {
+				display: block;
+				padding: 15px 20px;
+				background-color: royalblue;
+				border-radius: 5px;
+				color: #fff;
+				font-weight: 700;
+				text-align: center;
+			}
+		</style>
+		<div class="wrap">
+			<h1 class="title">🎀자바스크립트 웹게임🎀</h1>
+			<nav>
+				<ul class="nav-list">
+					<li><a href="wordReplay.html" class="btn" target="_blank">끝말잇기</a></li>
+					<li><a href="game1.html" class="btn">쿵쿵따</a></li>
+				</ul>
+			</nav>
+		</div>
+	</body>
+</html>

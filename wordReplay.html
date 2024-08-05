@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>끝말잇기</title>
+	</head>
+	<body>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+				box-sizing: border-box;
+				vertical-align: top;
+			}
+			.wrap {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				height: 100vh;
+				font-size: 22px;
+			}
+			.title {
+				margin-bottom: 20px;
+			}
+
+			.ip-text {
+				width: 250px;
+				height: 50px;
+				padding: 0 10px;
+				border-radius: 5px;
+			}
+			.btn-black {
+				background-color: #000;
+				border-radius: 5px;
+				color: #fff;
+				width: 70px;
+				height: 50px;
+			}
+			.next-word {
+				font-weight: 700;
+				margin-top: 20px;
+			}
+			.form-box {
+				margin-top: 30px;
+			}
+			.order {
+				font-weight: 700;
+			}
+		</style>
+		<div class="wrap">
+			<h3 class="title">🏆끝말잇기 게임🎵</h3>
+			<div><span id="order" class="order">1</span>번째 참가자😎</div>
+			<div class="next-word"><span id="word"></span></div>
+			<div class="form-box">
+				<input type="text" id="input" class="ip-text" />
+				<button class="btn-black">입력</button>
+			</div>
+		</div>
+
+		<script>
+			const number = Number(prompt("몇 명이 참가하나요?"));
+			const $button = document.querySelector("button");
+			const $input = document.querySelector("input");
+			const $word = document.querySelector("#word");
+			const $order = document.querySelector("#order");
+
+			let word; //제시어
+			let newWord; //새로 입력한 단어
+
+			const onClickButton = () => {
+				if (!word) {
+					//제시어가 비어있는가?
+					//비어있다
+					word = newWord; // 입력한 단어가 제시어가 된다
+					$word.textContent = word;
+
+					const order = Number($order.textContent); //차례 표시 문자열 -> 숫자로 변환 : 현재순서
+					if (order + 1 > number) {
+						$order.textContent = 1;
+					} else {
+						$order.textContent = order + 1;
+					}
+					$input.value = "";
+					$input.focus();
+				} else {
+					//비어 있지 않다
+					if (word[word.length - 1] === newWord[0]) {
+						//올바른가
+						word = newWord; // 현재 단어를 제시어에 저장
+						$word.textContent = word; //화면에 제시어 표시
+						const order = Number($order.textContent); //차례 표시 문자열 -> 숫자로 변환 : 현재순서
+						if (order + 1 > number) {
+							$order.textContent = 1;
+						} else {
+							$order.textContent = order + 1;
+						}
+						$input.value = ""; //입력창 비우기
+						$input.focus();
+					} else {
+						// 올바르지 않다
+						alert("올바르지 않은 단어입니다.");
+						$input.value = ""; //입력창 비우기
+						$input.focus();
+					}
+				}
+			};
+
+			const onInput = event => {
+				newWord = event.target.value;
+			};
+
+			$button.addEventListener("click", onClickButton);
+			$input.addEventListener("input", onInput);
+		</script>
+	</body>
+</html>
