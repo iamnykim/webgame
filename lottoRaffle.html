@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로또추첨기</title>
+</head>
+<body>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .ball {
+          display: flex;
+          justify-content: center;
+          border: 2px solid green; 
+          border-radius: 20px; 
+          width: 40px;
+          height: 40px;
+          font-size: 20px; 
+          text-align: center; 
+          color: green;
+        }
+        
+        .box { display: flex; flex-direction: column; align-items: center; }
+        .title {font-size: 40px; color: green; font-style: italic; margin: 25px 0;}
+        .flex { display: flex; flex-wrap: wrap;}
+        .flex .ball:last-child {margin-right: 0;}
+        .text-center {text-align: center;}
+        input { width: 300px; line-height: 50px; font-size: 24px; text-align: center; vertical-align: top; }
+        input::placeholder { font-size: 16px; }
+        button { width: 70px; line-height: 50px; font-size: 16px; vertical-align: top; }
+        
+    </style>
+    <div class="box">
+        <h5 class="title">Lotte Raffle</h5>
+        <form id="form">
+            <input name="input" placeholder="숫자 6개를 쉼표로 구분해 입력하세요." />
+            <button>추첨</button>
+        </form>
+       <div style="margin: 20px 0;">
+            <p class="text-center" style="margin: 20px 0;">✨당첨 숫자</p>
+            <div id="result" style="display:flex; flex-wrap: wrap; justify-content: center; width:300px; gap: 20px;"></div>
+        </div>
+        <div style="margin: 20px 0;"><p class="text-center">✨보너스 숫자</p> </div><div id="bonus" style="display:flex; justify-content: center; flex-wrap: wrap; width:300px; gap: 20px;"></div></div>
+    </div>
+
+    <script>
+      const $form = document.querySelector('#form');
+      const $result = document.querySelector('#result');
+      const $bonus = document.querySelector('#bonus');
+      function drawBall(number, $parent) {
+        const $ball = document.createElement('div');
+        $ball.className = 'ball';
+        $ball.textContent = number;
+        $parent.appendChild($ball);
+      }
+      const setTimeoutPromise = (ms) => new Promise((resolve, reject) => {
+        setTimeout(resolve, ms);
+      });
+      $form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const string = event.target.input.value;
+        if (!string.trim()) {
+          return alert('숫자를 입력하세요.');
+        }
+        const myNumbers = string.split(',').map((v) => parseInt(v.trim()));
+        if (myNumbers.length !== 6) {
+          return alert('6개의 숫자를 입력하세요.');
+        }
+        if (new Set(myNumbers).size !== 6) {
+          return alert('중복되지 않게 입력하세요.');
+        }
+        if (myNumbers.find((v) => v > 45 || v < 1)) {
+          return alert('1부터 45까지만 입력할 수 있습니다');
+        }
+        const candidate = Array(45).fill().map((v, i) => i + 1);
+        const shuffle = [];
+        while (candidate.length > 0) {
+          const random = Math.floor(Math.random() * candidate.length); // 무작위 인덱스 뽑기 
+          const spliceArray = candidate.splice(random, 1); // 뽑은 값은 배열에 들어 있음 
+          const value = spliceArray[0]; // 배열에 들어 있는 값을 꺼내고 
+          shuffle.push(value); // shuffle 배열에 넣기
+        }
+        console.log(shuffle);
+        const winBalls = shuffle.slice(0, 6).sort((a, b) => a - b);
+        const bonus = shuffle[6];
+        console.log(winBalls, bonus);
+        for (let i = 0; i < winBalls.length; i++) {
+          await setTimeoutPromise(1000);
+          console.log(winBalls[i], i);
+          drawBall(winBalls[i], $result);
+        }
+        await setTimeoutPromise(1000);
+        drawBall(bonus, $bonus);
+        await setTimeoutPromise(0);
+        let count = 0;
+        myNumbers.forEach((my) => {
+          if (winBalls.includes(my)) {
+            count++;
+          }
+        });
+        if (count === 6) {
+          alert('🎊1등!!!!!🎊');
+        } else if (count === 5) {
+          if (myNumbers.includes(bonus)) {
+            alert('2등!! 보너스 공이지만 6개 맞추셨네요.🎈');
+          } else {
+            alert('3등!! 아쉽습니다... 그래도 축하드려요!✨ㄴ')
+          }
+        } else if (count === 4) {
+          alert('4등!! 5만원 축하드려요!');
+        } else if (count === 3) {
+          alert('5등!! 5천원 축하드려요!');
+        } else {
+          alert('로또 참 어렵쥬?(┬┬﹏┬┬)');
+        }
+      });
+    </script>
+</body>
+</html>
